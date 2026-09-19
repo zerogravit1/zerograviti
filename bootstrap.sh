@@ -22,7 +22,11 @@ npm pkg set 'workspaces[0]=apps/*'
 npm pkg set 'workspaces[1]=packages/*'
 
 echo "Creating React application..."
-npm create vite@latest apps/web -- --template react-ts
+npm create vite@latest apps/web -- \
+  --template react-ts \
+  --no-interactive \
+  --eslint \
+  --no-immediate
 
 echo "Installing root development tooling..."
 npm install --save-dev \

@@ -1,32 +1,34 @@
 {
   "name": "zerograviti",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A personal site of Jonathan Schaffer found [here](https://zerograviti.com).",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zerogravit1/zerograviti.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/zerogravit1/zerograviti/issues"
   },
   "homepage": "https://github.com/zerogravit1/zerograviti#readme",
-  "private": "true",
+  "private": true,
   "engines": {
     "node": ">=26 <27"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^10.11.0",
+    "prettier": "^3.9.8",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.1"
+  }
 }
