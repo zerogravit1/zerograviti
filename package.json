@@ -1,0 +1,32 @@
+{
+  "name": "zerograviti",
+  "version": "1.0.0",
+  "description": "A personal site of Jonathan Schaffer found [here](https://zerograviti.com).",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerogravit1/zerograviti.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/zerogravit1/zerograviti/issues"
+  },
+  "homepage": "https://github.com/zerogravit1/zerograviti#readme",
+  "private": "true",
+  "engines": {
+    "node": ">=26 <27"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
