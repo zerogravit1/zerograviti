@@ -339,7 +339,7 @@ function App() {
                     <p className="project-type">{project.type}</p>
                     <h3>{project.name}</h3>
                     <p>{project.description}</p>
-                    <a href={project.link}>See repository here</a>
+                    {project.link && <a href={project.link}>See repository here</a>}
                   </article>
                 ))}
               </div>
