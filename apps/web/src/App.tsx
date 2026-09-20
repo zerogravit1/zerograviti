@@ -81,7 +81,14 @@ const errorLines = [
   { text: 'ERROR: feedback latency above threshold', tone: 'error' },
   { text: 'ERROR: confidence state unresolved', tone: 'error' },
   { text: 'diagnostic complete.', tone: 'muted' },
-]
+] as const;
+
+const statusLines = [
+  ['[ ... ]', 'shared infrastructure', 'initializing'],
+  ['[ ... ]', 'feedback loops', 'observing'],
+  ['[  ok ]', 'observability', 'active'],
+  ['[WARN ]', 'delivery confidence', 'unresolved']
+] as const;
 
 const LINE_ANIMATION_DURATION = 120;
 const TERMINAL_READY_PAUSE = 500;
@@ -169,10 +176,11 @@ function App() {
       case 'status':
         response = [
           'SYSTEM STATUS',
-          'shared infrastructure ........ initializing',
-          'feedback loops ............... observing',
-          'observability ................ active',
-          'delivery confidence .......... unresolved',
+          '',
+          ...statusLines.map(
+            ([state, name, value]) =>
+              `${state.padEnd(8, ' ')}${name.padEnd(26, '.')}${value}`,
+          ),
         ];
         break;
       case 'about':
