@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import './App.css';
@@ -79,8 +79,21 @@ const errorLines = [
   { text: 'diagnostic complete.', tone: 'muted' },
 ]
 
+const LINE_ANIMATION_DURATION = 120;
+const TERMINAL_READY_PAUSE = 500;
+
 const bootDelays = createDelays(bootLines.length, MIN_BOOT_DELAY, MAX_BOOT_DELAY, MIN_DELAY_DIFFERENCE);
-const errorDelays = createDelays(errorLines.length, MIN_ERROR_DELAY, MAX_ERROR_DELAY, MIN_ERROR_DIFFERENCE);
+const bootSequenceEnd = (bootDelays.at(-1) ?? 0) + LINE_ANIMATION_DURATION;
+
+const errorDelays = createDelays(
+  errorLines.length,
+  MIN_ERROR_DELAY,
+  MAX_ERROR_DELAY,
+  MIN_ERROR_DIFFERENCE,
+).map((delay) => bootSequenceEnd + delay);
+
+const errorSequenceEnd = (errorDelays.at(-1) ?? bootSequenceEnd) + LINE_ANIMATION_DURATION;
+const terminalReadyDelay = errorSequenceEnd + TERMINAL_READY_PAUSE;
 
 type Command = 'help' | 'explore' | 'projects' | 'about' | 'status';
 
@@ -94,10 +107,19 @@ const commandHelp: Record<Command, string> = {
 
 function App() {
   const [entered, setEntered] = useState(false);
+  const [terminalReady, setTerminalReady] = useState(false);
   const [command, setCommand] = useState('');
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
     'type "help" to list available commands',
   ]);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setTerminalReady(true);
+    }, terminalReadyDelay);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   function enterAt(target?: string) {
     setEntered(true);
@@ -182,40 +204,46 @@ function App() {
               </p>
             ))}
 
-            <div className="terminal-session">
-              {terminalOutput.map((line, index) => (
-                <p className="terminal-line terminal-line--session" key={`${line}-${index}`}>
-                  {line}
-                </p>
-              ))}
-            </div>
+            {terminalReady && (
+              <div className="terminal-session">
+                {terminalOutput.map((line, index) => (
+                  <p className="terminal-line terminal-line--session" key={`${line}-${index}`}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+            )}
           </div>
 
-          <form className="terminal-prompt" onSubmit={handleSubmit}>
-            <label className="sr-only" htmlFor="command">
-              System command
-            </label>
-            <span aria-hidden="true">&gt;</span>
-            <input
-              id="command"
-              name="command"
-              value={command}
-              onChange={(event) => setCommand(event.target.value)}
-              autoComplete="off"
-              autoCapitalize="none"
-              spellCheck={false}
-              autoFocus
-            />
-            {/* <span className="cursor" aria-hidden="true" /> */}
-          </form>
+          {terminalReady && (
+            <>
+              <form className="terminal-prompt" onSubmit={handleSubmit}>
+                <label className="sr-only" htmlFor="command">
+                  System command
+                </label>
+                <span aria-hidden="true">&gt;</span>
+                <input
+                  id="command"
+                  name="command"
+                  value={command}
+                  onChange={(event) => setCommand(event.target.value)}
+                  autoComplete="off"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  autoFocus
+                />
+                {/* <span className="cursor" aria-hidden="true" /> */}
+              </form>
 
-          <div className="command-hints" aria-label="Suggested commands">
-            {(['help', 'status', 'explore'] as const).map((suggestion) => (
-              <button type="button" onClick={() => runCommand(suggestion)} key={suggestion}>
-                {suggestion}
-              </button>
-            ))}
-          </div>
+              <div className="command-hints" aria-label="Suggested commands">
+                {(['help', 'status', 'explore'] as const).map((suggestion) => (
+                  <button type="button" onClick={() => runCommand(suggestion)} key={suggestion}>
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </section>
 
