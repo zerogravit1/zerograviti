@@ -82,23 +82,31 @@ const errorLines = [
 const LINE_ANIMATION_DURATION = 120;
 const TERMINAL_READY_PAUSE = 500;
 
-const bootDelays = createDelays(bootLines.length, MIN_BOOT_DELAY, MAX_BOOT_DELAY, MIN_DELAY_DIFFERENCE);
-const bootSequenceEnd = (bootDelays.at(-1) ?? 0) + LINE_ANIMATION_DURATION;
+function createStartupSequence() {
+  const bootDelays = createDelays(bootLines.length, MIN_BOOT_DELAY, MAX_BOOT_DELAY, MIN_DELAY_DIFFERENCE);
+  const bootSequenceEnd = (bootDelays.at(-1) ?? 0) + LINE_ANIMATION_DURATION;
 
-const errorDelays = createDelays(
-  errorLines.length,
-  MIN_ERROR_DELAY,
-  MAX_ERROR_DELAY,
-  MIN_ERROR_DIFFERENCE,
-).map((delay) => bootSequenceEnd + delay);
+  const errorDelays = createDelays(
+    errorLines.length,
+    MIN_ERROR_DELAY,
+    MAX_ERROR_DELAY,
+    MIN_ERROR_DIFFERENCE,
+  ).map((delay) => bootSequenceEnd + delay);
 
-const errorSequenceEnd = (errorDelays.at(-1) ?? bootSequenceEnd) + LINE_ANIMATION_DURATION;
-const terminalReadyDelay = errorSequenceEnd + TERMINAL_READY_PAUSE;
+  const errorSequenceEnd = (errorDelays.at(-1) ?? bootSequenceEnd) + LINE_ANIMATION_DURATION;
 
-type Command = 'help' | 'explore' | 'projects' | 'about' | 'status';
+  return {
+    bootDelays,
+    errorDelays,
+    terminalReadyDelay: errorSequenceEnd + TERMINAL_READY_PAUSE,
+  };
+}
+
+type Command = 'help' | 'initialize' | 'explore' | 'projects' | 'about' | 'status';
 
 const commandHelp: Record<Command, string> = {
   help: 'list available commands',
+  initialize: 'rerun system initialization',
   explore: 'enter the system',
   projects: 'inspect engineering systems',
   about: 'identify operator',
@@ -108,6 +116,8 @@ const commandHelp: Record<Command, string> = {
 function App() {
   const [entered, setEntered] = useState(false);
   const [terminalReady, setTerminalReady] = useState(false);
+  const [startupRun, setStartupRun] = useState(0);
+  const [startupSequence, setStartupSequence] = useState(createStartupSequence);
   const [command, setCommand] = useState('');
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
     'type "help" to list available commands',
@@ -116,10 +126,10 @@ function App() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       setTerminalReady(true);
-    }, terminalReadyDelay);
+    }, startupSequence.terminalReadyDelay);
 
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [startupSequence]);
 
   function enterAt(target?: string) {
     setEntered(true);
@@ -145,6 +155,13 @@ function App() {
           ...Object.entries(commandHelp).map(([name, description]) => `${name.padEnd(10)} ${description}`),
         ];
         break;
+      case 'initialize':
+        setTerminalReady(false);
+        setTerminalOutput(['type "help" to list available commands']);
+        setCommand('');
+        setStartupRun((current) => current + 1);
+        setStartupSequence(createStartupSequence());
+        return;
       case 'status':
         response = [
           'SYSTEM STATUS',
@@ -187,8 +204,8 @@ function App() {
             {bootLines.map((line, index) => (
               <p
                 className={`terminal-line terminal-line--${line.tone}`}
-                style={{ animationDelay: `${bootDelays[index]}ms` }}
-                key={line.text}
+                style={{ animationDelay: `${startupSequence.bootDelays[index]}ms` }}
+                key={`${startupRun}-boot-${line.text}`}
               >
                 {line.text}
               </p>
@@ -197,8 +214,8 @@ function App() {
             {errorLines.map((line, index) => (
               <p
                 className={`terminal-line terminal-line--${line.tone}`}
-                style={{ animationDelay: `${errorDelays[index]}ms` }}
-                key={line.text}
+                style={{ animationDelay: `${startupSequence.errorDelays[index]}ms` }}
+                key={`${startupRun}-error-${line.text}`}
               >
                 {line.text}
               </p>
@@ -236,7 +253,7 @@ function App() {
               </form>
 
               <div className="command-hints" aria-label="Suggested commands">
-                {(['help', 'status', 'explore'] as const).map((suggestion) => (
+                {(['help', 'status', 'initialize', 'explore'] as const).map((suggestion) => (
                   <button type="button" onClick={() => runCommand(suggestion)} key={suggestion}>
                     {suggestion}
                   </button>
