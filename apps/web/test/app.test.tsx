@@ -23,6 +23,26 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: 'explore' })).toBeDefined();
   });
 
+  it('reruns startup when initialize is selected', () => {
+    vi.useFakeTimers();
+    render(<App />);
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'initialize' }));
+
+    expect(screen.queryByLabelText('System command')).toBeNull();
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(screen.getByLabelText('System command')).toBeDefined();
+    expect(screen.getByText('type "help" to list available commands')).toBeDefined();
+  });
+
   it('reveals the site when exploration begins', () => {
     vi.useFakeTimers();
     render(<App />);
