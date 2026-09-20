@@ -369,6 +369,10 @@ function App() {
               <p>Quality engineering · Test infrastructure · Developer productivity</p>
             </div>
 
+            <div>
+              <p>Interested in the work?</p>
+            </div>
+            <a href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/">Connect with me on LinkedIn</a>
             <a href="https://github.com/zerogravit1">github.com/zerogravit1</a>
           </footer>
         </div>
