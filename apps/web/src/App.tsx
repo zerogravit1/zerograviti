@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CSSProperties, FormEvent } from 'react';
+import type { FormEvent } from 'react';
 
 import './App.css';
 
@@ -30,18 +30,57 @@ const projects = [
   },
 ] as const;
 
+const MIN_BOOT_DELAY = 375;
+const MAX_BOOT_DELAY = 450;
+const MIN_DELAY_DIFFERENCE = 15;
+
+const MIN_ERROR_DELAY = 600;
+const MAX_ERROR_DELAY = 1000;
+const MIN_ERROR_DIFFERENCE = 125;
+
+function createDelays(count: number, minDelay: number, maxDelay: number, diff: number ): number[] {
+  const delays: number[] = [];
+  let previousInterval: number | undefined;
+  let elapsed = 0;
+
+  for (let index = 0; index < count; index += 1) {
+    let interval: number;
+
+    do {
+      interval =
+        Math.floor(Math.random() * (maxDelay - minDelay + 1)) +
+        minDelay;
+    } while (
+      previousInterval !== undefined &&
+      Math.abs(interval - previousInterval) < diff
+    );
+
+    elapsed += interval;
+    delays.push(elapsed);
+    previousInterval = interval;
+  }
+
+  return delays;
+}
+
 const bootLines = [
   { text: 'ZEROGRAVITI SYSTEM // build 0.1.0', tone: 'muted' },
   { text: 'initializing environment...', tone: 'normal' },
   { text: 'loading delivery graph...', tone: 'normal' },
   { text: 'loading quality controls...', tone: 'normal' },
   { text: 'loading observability...', tone: 'normal' },
+] as const;
+
+const errorLines = [
   { text: 'ERROR: workflow exceeded expected complexity', tone: 'error' },
   { text: 'ERROR: duplicate infrastructure detected', tone: 'error' },
   { text: 'ERROR: feedback latency above threshold', tone: 'error' },
   { text: 'ERROR: confidence state unresolved', tone: 'error' },
   { text: 'diagnostic complete.', tone: 'muted' },
-] as const;
+]
+
+const bootDelays = createDelays(bootLines.length, MIN_BOOT_DELAY, MAX_BOOT_DELAY, MIN_DELAY_DIFFERENCE);
+const errorDelays = createDelays(errorLines.length, MIN_ERROR_DELAY, MAX_ERROR_DELAY, MIN_ERROR_DIFFERENCE);
 
 type Command = 'help' | 'explore' | 'projects' | 'about' | 'status';
 
@@ -57,7 +96,7 @@ function App() {
   const [entered, setEntered] = useState(false);
   const [command, setCommand] = useState('');
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
-    'type "help" to inspect available commands',
+    'type "help" to list available commands',
   ]);
 
   function enterAt(target?: string) {
@@ -126,7 +165,17 @@ function App() {
             {bootLines.map((line, index) => (
               <p
                 className={`terminal-line terminal-line--${line.tone}`}
-                style={{ '--line-index': index } as CSSProperties}
+                style={{ animationDelay: `${bootDelays[index]}ms` }}
+                key={line.text}
+              >
+                {line.text}
+              </p>
+            ))}
+
+            {errorLines.map((line, index) => (
+              <p
+                className={`terminal-line terminal-line--${line.tone}`}
+                style={{ animationDelay: `${errorDelays[index]}ms` }}
                 key={line.text}
               >
                 {line.text}
@@ -157,7 +206,7 @@ function App() {
               spellCheck={false}
               autoFocus
             />
-            <span className="cursor" aria-hidden="true" />
+            {/* <span className="cursor" aria-hidden="true" /> */}
           </form>
 
           <div className="command-hints" aria-label="Suggested commands">

@@ -51,7 +51,6 @@
 .terminal-line:not(.terminal-line--session) {
   opacity: 0;
   animation: terminal-line-in 120ms ease forwards;
-  animation-delay: calc(var(--line-index) * 110ms);
 }
 
 .terminal-line--muted {
