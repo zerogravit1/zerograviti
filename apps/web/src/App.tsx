@@ -7,24 +7,28 @@ const projects = [
   {
     name: 'Forene',
     type: 'Test infrastructure',
+    link: '',
     description:
       'A developer-facing automation platform for shared configuration, authentication, execution, and cross-application workflows.',
   },
   {
     name: 'Atticus',
     type: 'Service virtualization',
+    link: 'https://github.com/zerogravit1/atticus-mock-service',
     description:
       'An open-source Playwright-first HTTP record, replay, and mocking service for repeatable integration testing.',
   },
   {
     name: 'Shipweard',
     type: 'Observability',
+    link: 'https://github.com/zerogravit1/shipweard',
     description:
       'A service-traffic visualization project built around distributed tracing and runtime visibility.',
   },
   {
     name: 'Tun',
     type: 'Device infrastructure',
+    link: 'https://github.com/zerogravit1/tun',
     description:
       'A virtual device registry and reservation model for coordinating shared physical test environments.',
   },
@@ -326,6 +330,7 @@ function App() {
                     <p className="project-type">{project.type}</p>
                     <h3>{project.name}</h3>
                     <p>{project.description}</p>
+                    <a href={project.link}>See repository here</a>
                   </article>
                 ))}
               </div>
