@@ -1,11 +1,22 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { act, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import App from '../src/App';
 
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 describe('App', () => {
-  it('starts at an interactive system prompt', () => {
+  it('reveals the command prompt after the startup sequence', () => {
+    vi.useFakeTimers();
     render(<App />);
+
+    expect(screen.queryByLabelText('System command')).toBeNull();
+
+    act(() => {
+      vi.runAllTimers();
+    });
 
     expect(screen.getByLabelText('System command')).toBeDefined();
     expect(screen.getByText('ERROR: duplicate infrastructure detected')).toBeDefined();
@@ -13,7 +24,12 @@ describe('App', () => {
   });
 
   it('reveals the site when exploration begins', () => {
+    vi.useFakeTimers();
     render(<App />);
+
+    act(() => {
+      vi.runAllTimers();
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'explore' }));
 
