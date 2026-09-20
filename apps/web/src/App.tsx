@@ -1,4 +1,5 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
+import type { CSSProperties, FormEvent } from 'react';
 
 import './App.css';
 
@@ -125,7 +126,7 @@ function App() {
             {bootLines.map((line, index) => (
               <p
                 className={`terminal-line terminal-line--${line.tone}`}
-                style={{ '--line-index': index } as React.CSSProperties}
+                style={{ '--line-index': index } as CSSProperties}
                 key={line.text}
               >
                 {line.text}
