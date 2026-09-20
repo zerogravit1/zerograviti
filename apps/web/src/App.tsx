@@ -315,6 +315,7 @@ function App() {
                 <a className="button button-secondary" href="https://github.com/zerogravit1">
                   GitHub
                 </a>
+                <a className="button button-secondary" href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/">LinkedIn</a>
               </div>
             </section>
 
@@ -346,12 +347,12 @@ function App() {
                 <article>
                   <span className="principle-number">01</span>
                   <h3>Build reusable foundations</h3>
-                  <p>Solve recurring engineering problems once in shared tooling instead of repeatedly inside each test.</p>
+                  <p>Solve recurring engineering problems once with shared tooling over carrying the same friction from project to project.</p>
                 </article>
                 <article>
                   <span className="principle-number">02</span>
                   <h3>Shorten feedback loops</h3>
-                  <p>Put useful signals close to the developer so failures are easier to understand and act on.</p>
+                  <p>Put useful information close to the developer so failures are easier to understand, act on, and resolve.</p>
                 </article>
                 <article>
                   <span className="principle-number">03</span>
