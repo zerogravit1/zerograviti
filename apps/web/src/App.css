@@ -37,6 +37,7 @@
   font-family: var(--mono);
   font-size: clamp(0.86rem, 1.4vw, 1rem);
   line-height: 1.65;
+  text-align: left;
 }
 
 .terminal-output {
@@ -64,6 +65,7 @@
 .terminal-session {
   margin-top: 1.2rem;
   color: #9dab9f;
+  text-align: left;
 }
 
 .terminal-line--session {

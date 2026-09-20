@@ -152,7 +152,7 @@ function App() {
       case 'help':
         response = [
           'AVAILABLE COMMANDS',
-          ...Object.entries(commandHelp).map(([name, description]) => `${name.padEnd(10)} ${description}`),
+          ...Object.entries(commandHelp).map(([name, description]) => `${name.padEnd(15)} ${description}`),
         ];
         break;
       case 'initialize':
