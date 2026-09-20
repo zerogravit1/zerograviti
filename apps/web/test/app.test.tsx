@@ -7,6 +7,6 @@ describe('App', () => {
   it('renders the zerograviti application', async () => {
     render(<App />);
 
-    expect(screen.findByText('Get Started')).toBeDefined();
+    await expect(screen.getByText('Get Started')).toBeDefined();
   });
 })
