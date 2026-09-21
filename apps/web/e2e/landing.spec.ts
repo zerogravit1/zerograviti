@@ -35,7 +35,7 @@ test.describe('terminal output', () => {
     test('select help', async ({ page }) => {
       await page.getByRole('button', { name: 'help' }).click();
 
-      await expect(page.getByText('AVAILABLE COMMANDS')).toBeVisible({ timeout: 10_000 });
+      await expect(page.getByText('AVAILABLE COMMANDS').nth(1)).toBeVisible({ timeout: 10_000 });
     });
 
     test('select status', async ({ page }) => {
