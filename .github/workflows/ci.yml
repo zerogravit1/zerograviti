@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install playwright
+        run: npx playwright install --with-deps chromium
+
       - name: Lint
         run: npm run lint
 
@@ -36,6 +39,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: E2E
+        run: npm run e2e -w web
 
       - name: Configure deployment SSH
         if: github.event_name == 'push' && github.ref =='refs/heads/main'

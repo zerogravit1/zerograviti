@@ -32,10 +32,6 @@ test.describe('terminal output', () => {
   });
 
   test.describe('UI interactions', () => {
-    // test.beforeEach(async ({ page }) => {
-    //   await page.goto('/');
-    // });
-
     test('select help', async ({ page }) => {
       await page.getByRole('button', { name: 'help' }).click();
 
