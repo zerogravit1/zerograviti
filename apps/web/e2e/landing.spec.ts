@@ -35,13 +35,13 @@ test.describe('terminal output', () => {
     test('select help', async ({ page }) => {
       await page.getByRole('button', { name: 'help' }).click();
 
-      await expect(page.locator('.terminal-session')).toBeVisible();
+      await expect(page.getByText('AVAILABLE COMMANDS')).toBeVisible();
     });
 
     test('select status', async ({ page }) => {
       await page.getByRole('button', { name: 'status' }).click();
 
-      await expect(page.locator('.terminal-session')).toBeVisible();
+      await expect(page.getByText('SYSTEM STATUS')).toBeVisible();
     });
 
     test('select initialize', async ({ page }) => {
