@@ -142,14 +142,16 @@ function App() {
   }
 
   function runCommand(rawCommand: string, source: CommandSource) {
-    const normalized = rawCommand.trim().toLowerCase() as Command;
+    const normalized = rawCommand.trim().toLowerCase();
 
     if (!normalized) {
       return;
     }
 
+    const isKnownCommand = normalized in commandHelp;
+
     trackEvent('console_command', {
-      command: normalized,
+      command: isKnownCommand ? normalized : 'invalid',
       source,
     });
 
@@ -372,7 +374,7 @@ function App() {
                     {project.link && (
                       <a
                         href={project.link}
-                        onClick={() => trackEvent('cta_click', { action: `${project.name}`, location: 'projects' })}
+                        onClick={() => trackEvent('cta_click', { action: project.name.toLowerCase(), location: 'projects' })}
                       >
                         See repository here
                       </a>
@@ -434,7 +436,7 @@ function App() {
             </a>
             <a
               href="https://github.com/zerogravit1"
-              onClick={() => trackEvent('cta_click', { action: 'repo', location: 'footer' })}
+              onClick={() => trackEvent('cta_click', { action: 'github', location: 'footer' })}
             >
               github.com/zerogravit1
             </a>
