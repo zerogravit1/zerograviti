@@ -11,24 +11,24 @@ test.describe('terminal output', () => {
     });
 
     test('terminal input', async ({ page }) => {
-      await expect(page.locator('.terminal-prompt')).toBeVisible({ timeout: 10_000});
+      await expect(page.locator('.terminal-prompt')).toBeVisible({ timeout: 10_000 });
     });
 
-    test('command-hints', async({ page }) => {
-      await expect(page.locator('.command-hints')).toBeVisible({ timeout: 10_000});
+    test('command-hints', async ({ page }) => {
+      await expect(page.locator('.command-hints')).toBeVisible({ timeout: 10_000 });
 
-      await expect(page.getByRole('button', { name: 'help'} )).toBeVisible();
-      await expect(page.getByRole('button', { name: 'help'} )).toHaveText('help');
+      await expect(page.getByRole('button', { name: 'help' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'help' })).toHaveText('help');
 
-      await expect(page.getByRole('button', { name: 'status'} )).toBeVisible();
-      await expect(page.getByRole('button', { name: 'status'} )).toHaveText('status');
+      await expect(page.getByRole('button', { name: 'status' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'status' })).toHaveText('status');
 
-      await expect(page.getByRole('button', { name: 'initialize'} )).toBeVisible();
-      await expect(page.getByRole('button', { name: 'initialize'} )).toHaveText('initialize');
+      await expect(page.getByRole('button', { name: 'initialize' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'initialize' })).toHaveText('initialize');
 
-      await expect(page.getByRole('button', { name: 'explore'} )).toBeVisible();
-      await expect(page.getByRole('button', { name: 'explore'} )).toHaveText('explore');
-    })
+      await expect(page.getByRole('button', { name: 'explore' })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'explore' })).toHaveText('explore');
+    });
   });
 
   test.describe('UI interactions', () => {
