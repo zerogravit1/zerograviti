@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import './App.css';
+import { trackEvent } from './analytics';
+
+type CommandSource = 'keyboard' | 'suggestion';
 
 const projects = [
   {
@@ -150,12 +153,17 @@ function App() {
     }
   }
 
-  function runCommand(rawCommand: string) {
+  function runCommand(rawCommand: string, source: CommandSource) {
     const normalized = rawCommand.trim().toLowerCase() as Command;
 
     if (!normalized) {
       return;
     }
+
+    trackEvent('console_command', {
+      command: normalized,
+      source,
+    });
 
     let response: string[];
 
@@ -205,7 +213,7 @@ function App() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    runCommand(command);
+    runCommand(command, 'keyboard');
   }
 
   return (
@@ -261,12 +269,11 @@ function App() {
                   spellCheck={false}
                   autoFocus
                 />
-                {/* <span className="cursor" aria-hidden="true" /> */}
               </form>
 
               <div className="command-hints" aria-label="Suggested commands">
                 {(['help', 'status', 'initialize', 'explore'] as const).map((suggestion) => (
-                  <button type="button" onClick={() => runCommand(suggestion)} key={suggestion}>
+                  <button type="button" onClick={() => runCommand(suggestion, 'suggestion')} key={suggestion}>
                     {suggestion}
                   </button>
                 ))}
@@ -317,13 +324,34 @@ function App() {
               </p>
 
               <div className="hero-actions">
-                <a className="button button-primary" href="#work">
+                <a className="button button-primary"
+                   href="#work"
+                   onClick={() =>
+                    trackEvent('cta_click', {
+                      action: 'continue_exploring',
+                      location: 'hero',
+                    })
+                   }>
                   Continue exploring
                 </a>
-                <a className="button button-secondary" href="https://github.com/zerogravit1">
+                <a className="button button-secondary"
+                   href="https://github.com/zerogravit1"
+                   onClick={() =>
+                    trackEvent('cta_click', {
+                      action: 'github',
+                      location: 'hero',
+                    })
+                   }>
                   GitHub
                 </a>
-                <a className="button button-secondary" href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/">LinkedIn</a>
+                <a className="button button-secondary"
+                   href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/"
+                   onClick={() =>
+                    trackEvent('cta_click', {
+                      action: 'linkedin',
+                      location: 'hero',
+                    })
+                   }>LinkedIn</a>
               </div>
             </section>
 
@@ -339,7 +367,7 @@ function App() {
                     <p className="project-type">{project.type}</p>
                     <h3>{project.name}</h3>
                     <p>{project.description}</p>
-                    {project.link && <a href={project.link}>See repository here</a>}
+                    {project.link && <a href={project.link} onClick={() => trackEvent('cta_click', {action: `${project.name}`, location: 'projects'})}>See repository here</a>}
                   </article>
                 ))}
               </div>
@@ -380,8 +408,8 @@ function App() {
             <div>
               <p>Interested in the work?</p>
             </div>
-            <a href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/">Connect with me on LinkedIn</a>
-            <a href="https://github.com/zerogravit1">github.com/zerogravit1</a>
+            <a href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/" onClick={() => trackEvent('cta_click', {action: 'linkedin', location: 'footer'})}>Connect with me on LinkedIn</a>
+            <a href="https://github.com/zerogravit1" onClick={() => trackEvent('cta_click', {action: 'repo', location: 'footer'})}>github.com/zerogravit1</a>
           </footer>
         </div>
       </div>
