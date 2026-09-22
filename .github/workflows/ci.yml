@@ -43,8 +43,24 @@ jobs:
       - name: E2E
         run: npm run e2e -w web
 
+      
+  deploy:
+    if: github.event_name == 'push' && github.ref =='refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: https://zerograviti.com
+
+    steps:
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+
       - name: Configure deployment SSH
-        if: github.event_name == 'push' && github.ref =='refs/heads/main'
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
