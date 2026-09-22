@@ -43,8 +43,31 @@ jobs:
       - name: E2E
         run: npm run e2e -w web
 
+      - name: Upload site
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+
+      
+  deploy:
+    if: github.event_name == 'push' && github.ref =='refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+      url: https://zerograviti.com
+
+    steps:
+      - name: Download site
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+
       - name: Configure deployment SSH
-        if: github.event_name == 'push' && github.ref =='refs/heads/main'
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
@@ -53,7 +76,6 @@ jobs:
           chmod 600 ~/.ssh/known_hosts
 
       - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           rsync -az --delete \
             -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \

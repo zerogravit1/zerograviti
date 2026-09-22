@@ -4,13 +4,14 @@ The goal of this project is to rebuild [zerograviti.com](https://zerograviti.com
 
 ## Phase 1 — Foundation
 
-- [ ] Scaffold the TypeScript application structure.
-- [ ] Add linting, formatting, typechecking, and unit-test tooling.
-- [ ] Add the first GitHub Actions validation workflow.
-- [ ] Add Docker support.
-- [ ] Build the minimal landing page around the new personal-brand message.
-- [ ] Add Playwright smoke coverage.
-- [ ] Deploy to DigitalOcean.
+- [x] Scaffold the TypeScript application structure.
+- [x] Add linting, formatting, typechecking, and unit-test tooling.
+- [x] Add the first GitHub Actions validation workflow.
+- [x] Build the minimal landing page around the new personal-brand message.
+- [x] Add Playwright smoke coverage.
+- [x] Deploy to DigitalOcean.
+
+Docker support in intentionally deferred until the platform includes a service that benefits from containerization.
 
 ## Phase 2 — Engineering Signals
 
