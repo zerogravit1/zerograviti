@@ -374,7 +374,9 @@ function App() {
                     {project.link && (
                       <a
                         href={project.link}
-                        onClick={() => trackEvent('cta_click', { action: project.name.toLowerCase(), location: 'projects' })}
+                        onClick={() =>
+                          trackEvent('cta_click', { action: project.name.toLowerCase(), location: 'projects' })
+                        }
                       >
                         See repository here
                       </a>

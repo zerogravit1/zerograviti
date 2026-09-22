@@ -12,12 +12,12 @@ describe('trackEvent', () => {
 
     trackEvent('cta_click', {
       action: 'github',
-      location: 'hero'
+      location: 'hero',
     });
 
     expect(window.gtag).toHaveBeenCalledWith('event', 'cta_click', {
       action: 'github',
-      location: 'hero'
+      location: 'hero',
     });
   });
 
@@ -25,7 +25,7 @@ describe('trackEvent', () => {
     expect(() => {
       trackEvent('cta_click', {
         action: 'github',
-        location: 'hero'
+        location: 'hero',
       });
     }).not.toThrow();
   });
