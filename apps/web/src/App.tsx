@@ -25,15 +25,13 @@ const projects = [
     name: 'Shipweard',
     type: 'Observability',
     link: 'https://github.com/zerogravit1/shipweard',
-    description:
-      'A service-traffic visualization project built around distributed tracing and runtime visibility.',
+    description: 'A service-traffic visualization project built around distributed tracing and runtime visibility.',
   },
   {
     name: 'Tun',
     type: 'Device infrastructure',
     link: 'https://github.com/zerogravit1/tun',
-    description:
-      'A virtual device registry and reservation model for coordinating shared physical test environments.',
+    description: 'A virtual device registry and reservation model for coordinating shared physical test environments.',
   },
 ] as const;
 
@@ -45,7 +43,7 @@ const MIN_ERROR_DELAY = 600;
 const MAX_ERROR_DELAY = 1000;
 const MIN_ERROR_DIFFERENCE = 125;
 
-function createDelays(count: number, minDelay: number, maxDelay: number, diff: number ): number[] {
+function createDelays(count: number, minDelay: number, maxDelay: number, diff: number): number[] {
   const delays: number[] = [];
   let previousInterval: number | undefined;
   let elapsed = 0;
@@ -54,13 +52,8 @@ function createDelays(count: number, minDelay: number, maxDelay: number, diff: n
     let interval: number;
 
     do {
-      interval =
-        Math.floor(Math.random() * (maxDelay - minDelay + 1)) +
-        minDelay;
-    } while (
-      previousInterval !== undefined &&
-      Math.abs(interval - previousInterval) < diff
-    );
+      interval = Math.floor(Math.random() * (maxDelay - minDelay + 1)) + minDelay;
+    } while (previousInterval !== undefined && Math.abs(interval - previousInterval) < diff);
 
     elapsed += interval;
     delays.push(elapsed);
@@ -90,7 +83,7 @@ const statusLines = [
   ['[ ... ]', 'shared infrastructure', 'initializing'],
   ['[ ... ]', 'feedback loops', 'observing'],
   ['[  ok ]', 'observability', 'active'],
-  ['[WARN ]', 'delivery confidence', 'unresolved']
+  ['[WARN ]', 'delivery confidence', 'unresolved'],
 ] as const;
 
 const LINE_ANIMATION_DURATION = 120;
@@ -100,12 +93,9 @@ function createStartupSequence() {
   const bootDelays = createDelays(bootLines.length, MIN_BOOT_DELAY, MAX_BOOT_DELAY, MIN_DELAY_DIFFERENCE);
   const bootSequenceEnd = (bootDelays.at(-1) ?? 0) + LINE_ANIMATION_DURATION;
 
-  const errorDelays = createDelays(
-    errorLines.length,
-    MIN_ERROR_DELAY,
-    MAX_ERROR_DELAY,
-    MIN_ERROR_DIFFERENCE,
-  ).map((delay) => bootSequenceEnd + delay);
+  const errorDelays = createDelays(errorLines.length, MIN_ERROR_DELAY, MAX_ERROR_DELAY, MIN_ERROR_DIFFERENCE).map(
+    (delay) => bootSequenceEnd + delay,
+  );
 
   const errorSequenceEnd = (errorDelays.at(-1) ?? bootSequenceEnd) + LINE_ANIMATION_DURATION;
 
@@ -133,9 +123,7 @@ function App() {
   const [startupRun, setStartupRun] = useState(0);
   const [startupSequence, setStartupSequence] = useState(createStartupSequence);
   const [command, setCommand] = useState('');
-  const [terminalOutput, setTerminalOutput] = useState<string[]>([
-    'type "help" to list available commands',
-  ]);
+  const [terminalOutput, setTerminalOutput] = useState<string[]>(['type "help" to list available commands']);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -185,14 +173,15 @@ function App() {
         response = [
           'SYSTEM STATUS',
           '',
-          ...statusLines.map(
-            ([state, name, value]) =>
-              `${state.padEnd(8, ' ')}${name.padEnd(26, '.')}${value}`,
-          ),
+          ...statusLines.map(([state, name, value]) => `${state.padEnd(8, ' ')}${name.padEnd(26, '.')}${value}`),
         ];
         break;
       case 'about':
-        response = ['operator: Jonathan Schaffer', 'role: quality engineering + developer productivity', 'opening profile...'];
+        response = [
+          'operator: Jonathan Schaffer',
+          'role: quality engineering + developer productivity',
+          'opening profile...',
+        ];
         enterAt('about');
         break;
       case 'projects':
@@ -200,7 +189,12 @@ function App() {
         enterAt('work');
         break;
       case 'explore':
-        response = ['resolving system topology...', 'mapping dependencies...', 'establishing observation points...', 'READY.'];
+        response = [
+          'resolving system topology...',
+          'mapping dependencies...',
+          'establishing observation points...',
+          'READY.',
+        ];
         enterAt();
         break;
       default:
@@ -324,34 +318,42 @@ function App() {
               </p>
 
               <div className="hero-actions">
-                <a className="button button-primary"
-                   href="#work"
-                   onClick={() =>
+                <a
+                  className="button button-primary"
+                  href="#work"
+                  onClick={() =>
                     trackEvent('cta_click', {
                       action: 'continue_exploring',
                       location: 'hero',
                     })
-                   }>
+                  }
+                >
                   Continue exploring
                 </a>
-                <a className="button button-secondary"
-                   href="https://github.com/zerogravit1"
-                   onClick={() =>
+                <a
+                  className="button button-secondary"
+                  href="https://github.com/zerogravit1"
+                  onClick={() =>
                     trackEvent('cta_click', {
                       action: 'github',
                       location: 'hero',
                     })
-                   }>
+                  }
+                >
                   GitHub
                 </a>
-                <a className="button button-secondary"
-                   href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/"
-                   onClick={() =>
+                <a
+                  className="button button-secondary"
+                  href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/"
+                  onClick={() =>
                     trackEvent('cta_click', {
                       action: 'linkedin',
                       location: 'hero',
                     })
-                   }>LinkedIn</a>
+                  }
+                >
+                  LinkedIn
+                </a>
               </div>
             </section>
 
@@ -367,7 +369,14 @@ function App() {
                     <p className="project-type">{project.type}</p>
                     <h3>{project.name}</h3>
                     <p>{project.description}</p>
-                    {project.link && <a href={project.link} onClick={() => trackEvent('cta_click', {action: `${project.name}`, location: 'projects'})}>See repository here</a>}
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        onClick={() => trackEvent('cta_click', { action: `${project.name}`, location: 'projects' })}
+                      >
+                        See repository here
+                      </a>
+                    )}
                   </article>
                 ))}
               </div>
@@ -383,17 +392,26 @@ function App() {
                 <article>
                   <span className="principle-number">01</span>
                   <h3>Build reusable foundations</h3>
-                  <p>Solve recurring engineering problems once with shared tooling over carrying the same friction from project to project.</p>
+                  <p>
+                    Solve recurring engineering problems once with shared tooling over carrying the same friction from
+                    project to project.
+                  </p>
                 </article>
                 <article>
                   <span className="principle-number">02</span>
                   <h3>Shorten feedback loops</h3>
-                  <p>Put useful information close to the developer so failures are easier to understand, act on, and resolve.</p>
+                  <p>
+                    Put useful information close to the developer so failures are easier to understand, act on, and
+                    resolve.
+                  </p>
                 </article>
                 <article>
                   <span className="principle-number">03</span>
                   <h3>Preserve trust</h3>
-                  <p>Automation should improve speed without removing the controls, evidence, and visibility teams rely on.</p>
+                  <p>
+                    Automation should improve speed without removing the controls, evidence, and visibility teams rely
+                    on.
+                  </p>
                 </article>
               </div>
             </section>
@@ -408,8 +426,18 @@ function App() {
             <div>
               <p>Interested in the work?</p>
             </div>
-            <a href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/" onClick={() => trackEvent('cta_click', {action: 'linkedin', location: 'footer'})}>Connect with me on LinkedIn</a>
-            <a href="https://github.com/zerogravit1" onClick={() => trackEvent('cta_click', {action: 'repo', location: 'footer'})}>github.com/zerogravit1</a>
+            <a
+              href="https://www.linkedin.com/in/jonathan-schaffer-59911a2/"
+              onClick={() => trackEvent('cta_click', { action: 'linkedin', location: 'footer' })}
+            >
+              Connect with me on LinkedIn
+            </a>
+            <a
+              href="https://github.com/zerogravit1"
+              onClick={() => trackEvent('cta_click', { action: 'repo', location: 'footer' })}
+            >
+              github.com/zerogravit1
+            </a>
           </footer>
         </div>
       </div>
