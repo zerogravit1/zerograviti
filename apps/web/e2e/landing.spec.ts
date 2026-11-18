@@ -54,6 +54,12 @@ test.describe('terminal output', () => {
       await page.getByRole('button', { name: 'explore' }).click();
 
       await expect(page.locator('.site-shell')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Forge' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Forene' })).toHaveCount(0);
+      await expect(page.getByRole('link', { name: 'See repository here' }).first()).toHaveAttribute(
+        'href',
+        'https://github.com/zerogravit1/forge',
+      );
     });
   });
 });
