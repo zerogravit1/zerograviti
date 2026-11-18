@@ -31,6 +31,17 @@ test.describe('terminal output', () => {
     });
   });
 
+  test('project repository links stay legible in dark mode', async ({ page }) => {
+    await page.emulateMedia({ colorScheme: 'dark' });
+    await page.getByRole('button', { name: 'explore' }).click();
+
+    const repositoryLink = page.getByRole('link', { name: 'See repository here' }).first();
+    await expect(repositoryLink).toHaveCSS('color', 'rgb(168, 195, 170)');
+
+    await repositoryLink.hover();
+    await expect(repositoryLink).toHaveCSS('color', 'rgb(241, 244, 239)');
+  });
+
   test.describe('UI interactions', () => {
     test('select help', async ({ page }) => {
       await page.getByRole('button', { name: 'help' }).click();
@@ -54,6 +65,12 @@ test.describe('terminal output', () => {
       await page.getByRole('button', { name: 'explore' }).click();
 
       await expect(page.locator('.site-shell')).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Forge' })).toBeVisible();
+      await expect(page.getByRole('heading', { name: 'Forene' })).toHaveCount(0);
+      await expect(page.getByRole('link', { name: 'See repository here' }).first()).toHaveAttribute(
+        'href',
+        'https://github.com/zerogravit1/forge',
+      );
     });
   });
 });

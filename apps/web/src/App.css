@@ -314,6 +314,16 @@
   line-height: 1.65;
 }
 
+.project-card a,
+.project-card a:visited {
+  color: var(--accent);
+}
+
+.project-card a:hover,
+.project-card a:focus-visible {
+  color: var(--text-strong);
+}
+
 .engineering-section {
   padding-bottom: 120px;
 }

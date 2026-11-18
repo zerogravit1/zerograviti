@@ -62,6 +62,10 @@ describe('App', () => {
     ).toBeDefined();
 
     expect(screen.getByRole('navigation', { name: 'Primary navigation' })).toBeDefined();
-    expect(screen.getByRole('heading', { name: 'Forene' })).toBeDefined();
+    expect(screen.getByRole('heading', { name: 'Forge' })).toBeDefined();
+    expect(screen.queryByRole('heading', { name: 'Forene' })).toBeNull();
+    expect(screen.getAllByRole('link', { name: 'See repository here' })[0]?.getAttribute('href')).toBe(
+      'https://github.com/zerogravit1/forge',
+    );
   });
 });
