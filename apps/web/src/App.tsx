@@ -8,11 +8,11 @@ type CommandSource = 'keyboard' | 'suggestion';
 
 const projects = [
   {
-    name: 'Forene',
-    type: 'Test infrastructure',
-    link: '',
+    name: 'Forge',
+    type: 'Test selection & orchestration',
+    link: 'https://github.com/zerogravit1/forge',
     description:
-      'A developer-facing automation platform for shared configuration, authentication, execution, and cross-application workflows.',
+      'An open-source CLI for change-aware test selection and execution, built to make validation decisions explainable. TypeScript/Vitest is the current focus; Java/Maven support is evolving.',
   },
   {
     name: 'Atticus',
